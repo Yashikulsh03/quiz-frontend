@@ -249,25 +249,31 @@ const CreateQuiz = ({quizId, quizType, setQuizType, setCreateQuizPage, showCreat
   }
 
   const createQuiz = () => {
-    //api call
-    axios.post(process.env.REACT_APP_BACKEND_URL_FOR_QUIZ, createQuizObject, { headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("jwtToken") } })
-      .then(response => {
-        console.log(response);
-        listQuizzes();
-        localStorage.setItem("quizId", response.data.quizId);
-        toast.success(response.data.message, {
-          position: "top-center",
-          autoClose: 1000
-        })
-        setQuestionSetsPopup(false);
-        setQuizPublished(true);
-      })
-      .catch(error => {
+    // API call
+    axios.post(process.env.REACT_APP_BACKEND_URL_FOR_QUIZ, createQuizObject, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("jwtToken")
+      }
+    })
+    .then(response => {
+      console.log(response);
+      listQuizzes();
+      localStorage.setItem("quizId", response.data.quizId);
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 1000
+      });
+      setQuestionSetsPopup(false);
+      setQuizPublished(true);
+    })
+    .catch(error => {
+      if (error.response) {
         if (error.response.status === 401) {
           toast.error("Invalid Session or Session expired. Please Log In again", {
             position: "top-center",
             autoClose: 2000
-          })
+          });
           localStorage.clear();
           setTimeout(() => {
             navigate("/");
@@ -279,9 +285,24 @@ const CreateQuiz = ({quizId, quizType, setQuizType, setCreateQuizPage, showCreat
           position: "top-center",
           autoClose: 1000
         });
-        setLoading(false);
-      })
-  }
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        toast.error("No response from server", {
+          position: "top-center",
+          autoClose: 1000
+        });
+      } else {
+        console.error("Error:", error.message);
+        toast.error("An error occurred. Please try again.", {
+          position: "top-center",
+          autoClose: 1000
+        });
+      }
+      setLoading(false);
+    });
+  };
+  
+     
 
   const editQuiz = async() => {
 
