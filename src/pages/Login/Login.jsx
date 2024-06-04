@@ -113,7 +113,7 @@ const handleSignUp=e=>{
       setLoading(true);
       
 
-      axios.post(`http://localhost:3001/register`, registerUserObject, { headers: { "Content-Type": "application/json" } })
+      axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}/register`, registerUserObject, { headers: { "Content-Type": "application/json" } })
       .then(response => {
         toast.success(response.data.message, {
           position: "top-center",
@@ -158,7 +158,7 @@ const handleLogin=e=>{
 
     setLoading(true);
 
-    axios.post(`http://localhost:3001/login`, loginUserObject, { headers: { "Content-Type": "application/json" } })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL_FOR_AUTH}/login`, loginUserObject, { headers: { "Content-Type": "application/json" } })
     .then(response => {
       localStorage.setItem("jwtToken", response.data.jwtToken);
       localStorage.setItem("quizOwnerId", response.data.id);

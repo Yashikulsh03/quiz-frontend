@@ -250,7 +250,7 @@ const CreateQuiz = ({quizId, quizType, setQuizType, setCreateQuizPage, showCreat
 
   const createQuiz = () => {
     // API call
-    axios.post(`https://quizbackend-6.onrender.com`, createQuizObject, {
+    axios.post(process.env.REACT_APP_BACKEND_URL_FOR_QUIZ, createQuizObject, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + localStorage.getItem("jwtToken")
